@@ -1,0 +1,26 @@
+{
+  "name": "bamazon-cli-app",
+  "version": "1.0.0",
+  "description": "Command line amazon store app ",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VCUPierre/Bamazon-CLI-App.git"
+  },
+  "author": "Pierre R.",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/VCUPierre/Bamazon-CLI-App/issues"
+  },
+  "homepage": "https://github.com/VCUPierre/Bamazon-CLI-App#readme",
+  "dependencies": {
+    "cli-table3": "^0.5.1",
+    "elegant-spinner": "^2.0.0",
+    "inquirer": "^7.0.0",
+    "log-update": "^3.3.0",
+    "mysql": "^2.17.1"
+  }
+}
