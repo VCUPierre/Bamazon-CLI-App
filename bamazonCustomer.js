@@ -7,12 +7,6 @@ var table = new Table({
     head: ['ID', 'Product Name', 'Department', 'Price', 'Stock']
   , colWidths: [5, 20, 20, 10, 10]
 });
- 
-// table is an Array, so you can `push`, `unshift`, `splice` and friends
-/*table.push(
-    ['First value', 'Second value']
-  , ['First value', 'Second value']
-);*/
 
 var connection = mySQL.createConnection({
     host: "127.0.0.1",
@@ -46,7 +40,7 @@ function getAllItems(){
                 }*/
             }
             //console.log('--------------------------------\n');
-            console.log(table.toString());
+            console.log(table.toString()+"\n");
             getItem();
         }
     );
@@ -65,7 +59,8 @@ function getItem(){
         //console.log(response.units);
         var query = 'SELECT product_name, price, stock_quantity FROM products WHERE ?'
         connection.query(query, {item_id: response.productID}, function(err, res){
-            console.log('You choose the item: '+JSON.stringify(res[0].product_name));
+            var selectedItem = JSON.stringify(res[0].product_name).slice(1, -1);
+            console.log('\nYou choose the item:\n\n'+ selectedItem +" - Current stock: "+res[0].stock_quantity +"\n" );
             makePurchase(response.productID, res[0].product_name, res[0].price, res[0].stock_quantity);
         });
     });  
@@ -84,15 +79,18 @@ function makePurchase(productID, productName, price, stock){
             console.log('sorry not enough available stock');
             continueShopping();
         } else {
-            console.log('You just purchased ('+response.units+'):');
-            console.log(productName+' at '+price+' each ');
-            console.log('x'+response.units)
-            console.log('Sales tax...')
-            console.log('Total... '+response.units * price);
+            var totalWitoutTax = response.units * price;
+            const TAXRATE = 0.043;
+            var totalTax = totalWitoutTax.toFixed(2) * TAXRATE;
+            console.log('\nYou just purchased ('+response.units+'):\n');
+            console.log(productName+' at $'+price+' each!');
+            console.log('x          '+response.units+' units')
+            console.log('Sales tax: ($'+ totalTax.toFixed(2) +')');
+            console.log('Total:     ' + (totalWitoutTax + totalTax));
         
             var query = 'UPDATE products Set ? WHERE ?'
             connection.query(query, [{stock_quantity: parseInt(newStock)},{item_id: parseInt(productID)}], function(err, res){
-                console.log('We just charged ... to you card ending in -6789.');
+                console.log('\nWe just charged ... to you card ending in -6789.\n');
                 continueShopping();
             }); 
         }
